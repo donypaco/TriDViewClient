@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "TriDViewClient1",
-    "slug": "TriDViewClient1",
+    "name": "TriDViewClient",
+    "slug": "TriDViewClient",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
