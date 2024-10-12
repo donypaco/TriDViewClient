@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { Text, FlatList, StyleSheet, SafeAreaView,TouchableOpacity } from 'react-native';
 import { fetchStores } from '../api/Api';
+import StoreCard from '../components/StoreCard';
 
 const HomeScreen = () => {
   const [stores, setStores] = useState([]);
@@ -26,16 +27,14 @@ const HomeScreen = () => {
   if (error) return <Text>Error: {error.message}</Text>;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{ flex: 1, padding: 10, backgroundColor: '#FFFFFF' }}>
       <FlatList
         data={stores}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text style={styles.storeName}>{item.storeName}</Text>
-          </View>
+          <StoreCard storeName={item.storeName} base64File={item.base64File} />
         )}
-        numColumns={2} // Two columns
+        numColumns={2}
       />
     </SafeAreaView>
   );
@@ -45,12 +44,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    backgroundColor: '#FFFFFF'
   },
   item: {
     flex: 1,
     margin: 10,
     padding: 20,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#D3D3D3',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
@@ -64,6 +64,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  image: {
+    width: 200, height: 200
+  }
 });
 
 export default HomeScreen;
