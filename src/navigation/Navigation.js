@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
@@ -11,20 +12,15 @@ function AppNavigator() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{
-              headerStyle: { backgroundColor: '#043' },
-              headerTintColor: '#fff',
+              headerStyle: { backgroundColor: '#333333' },
+              headerTintColor: '#000',
               headerTitleStyle: { fontWeight: 'bold' },
             }}
           >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        {/* <Stack.Screen
-              name="Details"
-              component={HomeScreen}
-              options={{ title: 'Detail Information' }}
-            /> */}
-          </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Screen name="Home" component={HomeScreen} /></Stack.Navigator>
+        </NavigationContainer >
       );
     }
-
+    const styles = StyleSheet.create({
+    });
 export default AppNavigator;
