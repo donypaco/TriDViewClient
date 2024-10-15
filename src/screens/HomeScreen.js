@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Text, FlatList, StyleSheet, SafeAreaView,TouchableOpacity } from 'react-native';
-import { fetchStores } from '../api/Api';
+import { fetchData, fetchStores } from '../api/Api';
 import StoreCard from '../components/StoreCard';
+import { API_URLS } from "../constants/urls";
 
 const HomeScreen = () => {
   const [stores, setStores] = useState([]);
@@ -11,7 +12,8 @@ const HomeScreen = () => {
   useEffect(() => {
     const getStores = async () => {
       try {
-        const data = await fetchStores();
+        // const data = await fetchStores();
+        const data = await fetchData(API_URLS.STORES);
         setStores(data);
       } catch (err) {
         setError(err);
@@ -22,6 +24,9 @@ const HomeScreen = () => {
 
     getStores();
   }, []);
+  const handleViewStore = (storeId) => {
+    navigation.navigate('Store', { storeId });  // Pass storeId as a parameter
+  };
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
@@ -32,7 +37,10 @@ const HomeScreen = () => {
         data={stores}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <StoreCard storeName={item.storeName} base64File={item.base64File} />
+          <StoreCard storeName={item.storeName}
+           base64File={item.base64File} 
+           description={item.description} 
+           storeId={item.id} />
         )}
         numColumns={2}
       />
