@@ -1,38 +1,101 @@
-import React, { useEffect, useState } from 'react'; // Added useEffect and useState
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Image, Button, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { API_URLS } from '../constants/urls';
 import { fetchData } from '../api/Api';
-import SelectDropdown from 'react-native-select-dropdown'; // Importing SelectDropdown
+import RNPickerSelect from 'react-native-picker-select';
+import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from '@react-navigation/native';
+
 
 const StoreRegistration = () => {
     const [plans, setPlans] = useState([]);
-  
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [image, setImage] = useState(null);
+  const navigation = useNavigation();
+
     const validationSchema = Yup.object().shape({
         storeName: Yup.string().required('Store Name is required'),
         description: Yup.string().required('Description is required'),
         storeLocation: Yup.string().required('Location is required'),
-        contactEmail: Yup.string().email('Invalid email').required('Email is required'),
-        plan: Yup.string().required('Plan is required'),
+        planID: Yup.string().required('Plan is required'),
     });
 
-    const handleFormSubmit = (values) => {
-        console.log(values);
+    const handleFormSubmit = async (values) => {
+        try {
+            const formData = new FormData();
+            
+            // Append other form data
+            formData.append('storeName', values.storeName);
+            formData.append('description', values.description);
+            formData.append('storeLocation', values.storeLocation);
+            formData.append('planID', values.planID);
+
+            // Append the image file
+            if (image) {
+                formData.append('formFile', {
+                    uri: image,
+                    name: image.split('/').pop(), // Extract the filename from the URI
+                    type: 'image/jpeg' // Adjust this if you know the MIME type of your image
+                });
+            }
+            console.log(formData)
+            const response = await fetch(`${API_URLS.REGISTER_STORE}`, {
+                method: 'POST',
+                body: formData, // Send the FormData as the body
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                Alert.alert('Error', errorData.message || 'Failed to register store');
+                return;
+            }
+            Alert.alert('Success', 'Your store has been registered successfully!', [
+                { text: 'OK', onPress: () => navigation.navigate('Home') } // Redirect to store list or homepage
+            ]);
+                    } catch (error) {
+            Alert.alert('Error', error.message || 'An unexpected error occurred');
+        }
+    };
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
     };
 
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const data = await fetchData(API_URLS.PLANS); 
+                const data = await fetchData(API_URLS.PLANS);
                 setPlans(data);
+                setLoading(false);
             } catch (error) {
-                console.error('Error fetching plans:', error);
+                setError('Error fetching plans');
+                setLoading(false);
             }
         };
-
         fetchPlans();
     }, []);
+
+    if (loading) {
+        return <ActivityIndicator size="large" color="#0000ff" />;
+    }
+
+    if (error) {
+        return <Text>{error}</Text>;
+    }
 
     return (
         <Formik
@@ -40,13 +103,12 @@ const StoreRegistration = () => {
                 storeName: '',
                 description: '',
                 storeLocation: '',
-                contactEmail: '',
-                plan: ''
+                planID: '',
             }}
             validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
         >
-            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
                 <View style={styles.container}>
                     <Text style={styles.title}>Store Registration</Text>
 
@@ -77,32 +139,27 @@ const StoreRegistration = () => {
                     />
                     {touched.storeLocation && errors.storeLocation && <Text style={styles.error}>{errors.storeLocation}</Text>}
 
-                    <TextInput
-                        placeholder="Contact Email"
-                        onChangeText={handleChange('contactEmail')}
-                        onBlur={handleBlur('contactEmail')}
-                        value={values.contactEmail}
-                        style={styles.input}
-                        keyboardType="email-address"
-                    />
-                    {touched.contactEmail && errors.contactEmail && <Text style={styles.error}>{errors.contactEmail}</Text>}
-
-                    {/* Dropdown for plans using SelectDropdown */}
                     <Text style={styles.label}>Select a Plan</Text>
-                    <SelectDropdown
-                        data={plans.map(plan => ({ label: plan.planName, value: plan.id }))} // Formatting data for dropdown
-                        onSelect={(selectedItem, index) => {
-                            handleChange('plan')(selectedItem.value); // Update formik state
+                    <RNPickerSelect
+                        onValueChange={(value) => setFieldValue('planID', value)} 
+                        items={plans.map(plan => ({ label: plan.planName, value: plan.id }))}
+                        placeholder={{
+                            label: "Select a Plan",
+                            value: null,
                         }}
-                        buttonTextAfterSelection={(selectedItem) => selectedItem.label} // Display label after selection
-                        rowTextForSelection={(item) => item.label} // Display label in dropdown
-                        buttonStyle={styles.dropdownButton}
-                        buttonTextStyle={styles.dropdownButtonText}
-                        dropdownStyle={styles.dropdown}
-                        rowStyle={styles.dropdownRow}
-                        rowTextStyle={styles.dropdownRowText}
+                        style={{
+                            inputIOS: styles.dropdownButton,
+                            inputAndroid: styles.dropdownButton,
+                            placeholder: styles.dropdownButtonText,
+                        }}
+                        value={values.planID} // Bind the selected value to Formik's value
                     />
-                    {touched.plan && errors.plan && <Text style={styles.error}>{errors.plan}</Text>}
+                    {touched.planID && errors.planID && <Text style={styles.error}>{errors.planID}</Text>}
+
+                    <View style = {styles.imageContainer}>
+                        <Button title="Pick an image from the gallery" onPress={pickImage} />
+                        {image && <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />}
+                    </View>
 
                     <Button title="Submit" onPress={handleSubmit} />
                 </View>
@@ -138,17 +195,6 @@ const styles = StyleSheet.create({
     dropdownButtonText: {
         color: 'black',
     },
-    dropdown: {
-        backgroundColor: 'white',
-    },
-    dropdownRow: {
-        backgroundColor: 'white',
-        borderBottomColor: 'gray',
-        borderBottomWidth: 1,
-    },
-    dropdownRowText: {
-        color: 'black',
-    },
     error: {
         color: 'red',
         fontSize: 12,
@@ -157,6 +203,16 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         fontSize: 16,
     },
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 10, 
+        marginTop: 10
+    },
+    imageContainer:{
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });
 
 export default StoreRegistration;
