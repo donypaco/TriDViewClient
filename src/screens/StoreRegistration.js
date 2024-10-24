@@ -7,20 +7,22 @@ import { fetchData } from '../api/Api';
 import RNPickerSelect from 'react-native-picker-select';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
-
+import { useTranslation } from 'react-i18next';
+import SuccessScreen from './SuccessScreen';
 
 const StoreRegistration = () => {
     const [plans, setPlans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [image, setImage] = useState(null);
-  const navigation = useNavigation();
+    const navigation = useNavigation();
+    const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        storeName: Yup.string().required('Store Name is required'),
-        description: Yup.string().required('Description is required'),
-        storeLocation: Yup.string().required('Location is required'),
-        planID: Yup.string().required('Plan is required'),
+        storeName: Yup.string().required(t('Store Name is required')),
+        description: Yup.string().required(t('Description is required')),
+        storeLocation: Yup.string().required(t('Location is required')),
+        planID: Yup.string().required(t('Plan is required')),
     });
 
     const handleFormSubmit = async (values) => {
@@ -37,26 +39,31 @@ const StoreRegistration = () => {
             if (image) {
                 formData.append('formFile', {
                     uri: image,
-                    name: image.split('/').pop(), // Extract the filename from the URI
-                    type: 'image/jpeg' // Adjust this if you know the MIME type of your image
+                    name: image.split('/').pop(), 
+                    type: 'image/jpeg'
                 });
             }
             console.log(formData)
             const response = await fetch(`${API_URLS.REGISTER_STORE}`, {
                 method: 'POST',
-                body: formData, // Send the FormData as the body
+                body: formData,
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                Alert.alert('Error', errorData.message || 'Failed to register store');
+                Alert.alert('Error', errorData.message || t('FailedToRegisterStore'));
                 return;
             }
-            Alert.alert('Success', 'Your store has been registered successfully!', [
-                { text: 'OK', onPress: () => navigation.navigate('Home') } // Redirect to store list or homepage
-            ]);
+        //     Alert.alert('Success',t('Your store has been registered successfully'), [
+        //         { text: 'OK', onPress: () => navigation.navigate('Home') } // Redirect to store list or homepage
+        //     ]
+        // );
+        const message = t('Your store has been registered successfully');
+        const targetScreen = t('Home');
+        navigation.navigate('Success', { message, targetScreen }); // Pass parameters
+
                     } catch (error) {
-            Alert.alert('Error', error.message || 'An unexpected error occurred');
+            Alert.alert('Error', error.message || t('An unexpected error occurred'));
         }
     };
 
@@ -113,7 +120,7 @@ const StoreRegistration = () => {
                     <Text style={styles.title}>Store Registration</Text>
 
                     <TextInput
-                        placeholder="Store Name"
+                        placeholder={t('Store Name')}
                         onChangeText={handleChange('storeName')}
                         onBlur={handleBlur('storeName')}
                         value={values.storeName}
@@ -122,7 +129,7 @@ const StoreRegistration = () => {
                     {touched.storeName && errors.storeName && <Text style={styles.error}>{errors.storeName}</Text>}
 
                     <TextInput
-                        placeholder="Description"
+                        placeholder={t('Description')}
                         onChangeText={handleChange('description')}
                         onBlur={handleBlur('description')}
                         value={values.description}
@@ -131,7 +138,7 @@ const StoreRegistration = () => {
                     {touched.description && errors.description && <Text style={styles.error}>{errors.description}</Text>}
 
                     <TextInput
-                        placeholder="Location"
+                        placeholder={t('Location')}
                         onChangeText={handleChange('storeLocation')}
                         onBlur={handleBlur('storeLocation')}
                         value={values.storeLocation}
@@ -144,7 +151,7 @@ const StoreRegistration = () => {
                         onValueChange={(value) => setFieldValue('planID', value)} 
                         items={plans.map(plan => ({ label: plan.planName, value: plan.id }))}
                         placeholder={{
-                            label: "Select a Plan",
+                            label: t('Select a Plan'),
                             value: null,
                         }}
                         style={{
@@ -157,11 +164,11 @@ const StoreRegistration = () => {
                     {touched.planID && errors.planID && <Text style={styles.error}>{errors.planID}</Text>}
 
                     <View style = {styles.imageContainer}>
-                        <Button title="Pick an image from the gallery" onPress={pickImage} />
+                        <Button title={t('Pick an image from the gallery')}  onPress={pickImage} />
                         {image && <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />}
                     </View>
 
-                    <Button title="Submit" onPress={handleSubmit} />
+                    <Button title={t('Submit')} onPress={handleSubmit} />
                 </View>
             )}
         </Formik>

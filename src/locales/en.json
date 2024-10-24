@@ -1,7 +1,21 @@
 {
-    "welcome": "Welcome",
+    "welcome": "Are you a store or a customer?",
     "selectLanguage": "Select Language",
     "store": "Store",
-    "customer": "Customer"
+    "customer": "Customer",
+    "FailedToRegisterStore":"Failed To Register Store!",
+    "Your store has been registered successfully" : "Your store has been registered successfully!",
+    "An unexpected error occurred": "An unexpected error occurred!",
+    "Store Name": "Store Name",
+    "Description": "Description",
+    "Location":"Location",
+    "Select a Plan":"Select a Plan",
+    "Pick an image from the gallery": "Pick an image from the gallery",
+    "Submit":"Submit",
+    "Store Name is required":"Store Name is required",
+    "Description is required":"Description is required",
+    "Location is required":"Location is required",
+    "Plan is required":"Plan is required",
+    "Welcome to store":"Welcome to store "
 }
   

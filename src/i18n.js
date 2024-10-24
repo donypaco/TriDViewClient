@@ -6,6 +6,7 @@ import sq from './locales/sq.json';
 i18n
   .use(initReactI18next) 
   .init({
+    compatibilityJSON: 'v3', // <--- add this line
     resources: {
       en: { translation: en },
       sq: { translation: sq },

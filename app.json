@@ -20,6 +20,9 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "plugins": [
+      "@reactvision/react-viro"
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     }
