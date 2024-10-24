@@ -1,6 +1,20 @@
 {
-    "welcome": "Mirë se vini",
+    "welcome": "Jeni nje dyqan apo konsumator?",
     "selectLanguage": "Zgjidhni gjuhën",
     "store": "Dyqan",
-    "customer": "Konsumator"
+    "customer": "Konsumator",
+    "FailedToRegisterStore":"Gabim në ruajtjen e dyqanit!",
+    "Your store has been registered successfully" : "Dyqani juaj eshte ruajtur me sukses!",
+    "An unexpected error occurred": "Nje error i papritur ka ndodhur!",
+    "Store Name": "Emri i dyqanit",
+    "Description": "Pershkrimi",
+    "Location":"Vendndodhje",
+    "Select a Plan":"Zgjidh nje plan",
+    "Pick an image from the gallery": "Zgjidh nje imazh nga galeria",
+    "Submit":"Dergo",
+    "Store Name is required":"Emri i dyqanit eshte mandator",
+    "Description is required":"Pershkrimi eshte mandator",
+    "Location is required":"Vendndodhja eshte mandator",
+    "Plan is required":"Plani eshte mandator",
+    "Welcome to store":"Mireseerdhe ne dyqanin"
 }
