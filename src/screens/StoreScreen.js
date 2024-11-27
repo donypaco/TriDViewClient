@@ -5,6 +5,8 @@ import i18n from '../i18n';
 import { useTranslation
 
  } from 'react-i18next';
+//  import ARScreen from './ARScreen';
+
 const StoreScreen = () => {
     const route = useRoute();
     const { storeId } = route.params;
@@ -12,6 +14,7 @@ const StoreScreen = () => {
     const [loading, setLoading] = useState(true);
     const { t } = useTranslation();
     return (
+
       <View>
             <Text>{t('Welcome to store')} {storeId}</Text>
       </View>

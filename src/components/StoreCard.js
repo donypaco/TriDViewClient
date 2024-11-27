@@ -1,21 +1,27 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const StoreCard = ({ storeName, base64File, description, storeId }) => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
-    const handleViewStore = () => {
-      navigation.navigate('StoreScreen', { storeId });
-    };
-  
+  const handleViewStore = () => {
+    navigation.navigate('StoreScreen', { storeId });
+  };
+
   return (
-    <View style={styles.card}>
-      <Text style={styles.storeName}>{storeName}</Text>
-      <Image source={{ uri: `data:image/jpeg;base64,${base64File}` }} resizeMode="contain" style={styles.image} />
-      <Text style={styles.description}>{description}</Text>
-      <Button title="View Store" onPress={handleViewStore} />
-    </View>
+    <TouchableOpacity style={styles.card} onPress={handleViewStore}>
+      <Image
+        source={{ uri: `data:image/jpeg;base64,${base64File}` }}
+        style={styles.image}
+      />
+      <View style={styles.textContainer}>
+        <Text style={styles.storeName}>{storeName}</Text>
+        <Text style={styles.description} numberOfLines={2}>
+          {description}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -23,35 +29,35 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     margin: 10,
-    padding: 20,
-    backgroundColor: '#D3D3D3',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    elevation: 3,
+    backgroundColor: '#FFFFFF', // Zara-like white background
+    borderRadius: 12,
+    overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-  },
-  storeName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    padding: 10,
-    color: '#333', // Darker text for better readability
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 5,
   },
   image: {
     width: '100%',
-    height: 50, // Fixed height for consistency
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    height: 150, // Fixed height while maintaining width
+    resizeMode: 'cover', // Ensures the image fills the space proportionally
+  },
+  textContainer: {
+    padding: 12,
+    alignItems: 'center',
+  },
+  storeName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333', // Neutral dark gray
+    textAlign: 'center',
+    marginBottom: 6,
   },
   description: {
     fontSize: 14,
-    color: '#666',
+    color: '#666', // Subtle gray for the description
     textAlign: 'center',
-    marginVertical: 10,
   },
 });
 
