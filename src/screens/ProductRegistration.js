@@ -9,6 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import FillingForm from '../components/FillingForm';
+import globalStyles from '../styles/globalStyles';
 
 const ProductRegistration = () => {
     const [categories, setCategories] = useState([]);
@@ -232,7 +233,7 @@ const ProductRegistration = () => {
         //     )}
         // </Formik>
         <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
+        <View style={globalStyles.container}>
             <Text style={styles.title}>Register a New Product</Text>
             <FillingForm fields={storeRegistrationFields} title = 'Register a New Product' />
         </View>

@@ -1,0 +1,29 @@
+{
+    "json.schemas": [
+        
+    ],
+    "workbench.colorCustomizations": {
+    "terminal.foreground": "#F8F8F2",
+    "terminal.background": "#0b0b09",
+    "terminalCursor.background": "#F8F8F0",
+    "terminalCursor.foreground": "#F8F8F0",
+    "terminal.ansiBlack": "#000000",
+    "terminal.ansiRed": "#FF5555",
+    "terminal.ansiGreen": "#50FA7B",
+    "terminal.ansiYellow": "#F1FA8C",
+    "terminal.ansiBlue": "#BD93F9",
+    "terminal.ansiMagenta": "#FF79C6",
+    "terminal.ansiCyan": "#8BE9FD",
+    "terminal.ansiWhite": "#BFBFBF",
+    "terminal.ansiBrightBlack": "#4D4D4D",
+    "terminal.ansiBrightRed": "#FF6E6E",
+    "terminal.ansiBrightGreen": "#69FF94",
+    "terminal.ansiBrightYellow": "#FFFFA5",
+    "terminal.ansiBrightBlue": "#D6ACFF",
+    "terminal.ansiBrightMagenta": "#FF92DF",
+    "terminal.ansiBrightCyan": "#A4FFFF",
+    "terminal.ansiBrightWhite": "#FFFFFF"
+},
+"terminal.integrated.fontFamily": "Fira Code, monospace",
+"terminal.integrated.fontSize": 14,
+}

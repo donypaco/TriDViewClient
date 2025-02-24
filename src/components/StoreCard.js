@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     margin: 10,
-    backgroundColor: '#FFFFFF', // Zara-like white background
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     overflow: 'hidden',
     shadowColor: '#000',
@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 150, // Fixed height while maintaining width
-    resizeMode: 'cover', // Ensures the image fills the space proportionally
+    height: 150,
+    resizeMode: 'cover',
   },
   textContainer: {
     padding: 12,
@@ -50,13 +50,13 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333', // Neutral dark gray
+    color: '#333',
     textAlign: 'center',
     marginBottom: 6,
   },
   description: {
     fontSize: 14,
-    color: '#666', // Subtle gray for the description
+    color: '#666',
     textAlign: 'center',
   },
 });

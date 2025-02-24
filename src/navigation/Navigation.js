@@ -15,6 +15,9 @@ import BottomBar from '../components/BottomBar';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProductRegistration from '../screens/ProductRegistration';
+import UploadLogoScreen from '../screens/UploadLogoScreen';
+import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -28,7 +31,10 @@ function BottomTabNavigator() {
       tabBar={(props) => <BottomBar {...props} />} // Custom bottom bar
     >
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Login" component={LoginScreen} />
+      <Tab.Screen name="Signup" component={SignupScreen} />
       <Tab.Screen name="Store Registration" component={StoreRegistrationScreen} />
+      <Tab.Screen name="Logo Upload" component={UploadLogoScreen} />
       <Tab.Screen name="Product Registration" component={ProductRegistration} />
 
     </Tab.Navigator>

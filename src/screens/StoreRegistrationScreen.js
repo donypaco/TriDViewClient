@@ -111,7 +111,12 @@ export default function StoreRegistrationScreen () {
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <Text style={styles.title}>Register a New Store</Text>
-                <FillingForm fields={storeRegistrationFields} onSubmit={handleStoreSubmit} title = 'Register a New Store' />
+                <FillingForm 
+                fields={storeRegistrationFields} 
+                // onSubmit={handleStoreSubmit} 
+                endpoint={API_URLS.REGISTER_STORE}
+                // title = 'Register a New Store' 
+                />
             </View>
         </SafeAreaView>
     );

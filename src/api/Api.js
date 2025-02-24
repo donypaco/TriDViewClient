@@ -32,15 +32,23 @@ export const fetchData = async (url, method = 'GET', body = null) => {
     const response = await fetch(url, options);
 
     if (!response.ok) {
-      throw new Error(`Network response was not ok. Status: ${response.status}`);
-    }
+      const errorData = await response.text(); // Get raw text for detailed error message
+      console.error(`Error ${response.status}: ${errorData}`);
+      throw new Error(`Request failed with status ${response.status}: ${errorData}`);
+  }
+
+  const contentLength = response.headers.get('content-length');
+  if (method !== 'GET' && (!contentLength || parseInt(contentLength, 10) === 0)) {
+      return { success: true }; // Return success if no body exists
+  }
 
     if (method !== 'DELETE') {
       const data = await response.json();
       return data;
     }
 
-    return { success: true };
+        const data = await response.json();
+        return data;
 
   } catch (error) {
     console.error(`${method} request error:`, error);

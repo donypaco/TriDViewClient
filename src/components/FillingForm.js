@@ -9,9 +9,12 @@ import {
     Alert,
     Platform
 } from "react-native";
+import { useTranslation } from 'react-i18next';
 import ModalDropdown from "react-native-modal-dropdown";
+import { fetchData } from "../api/Api";
 
-export default function FillingForm({ fields, onSubmit }) {
+export default function FillingForm({ fields, endpoint }) {
+    const { t } = useTranslation();
     const [formValues, setFormValues] = useState(
         fields.reduce((acc, field) => {
             acc[field.name] = field.defaultValue || "";
@@ -20,10 +23,32 @@ export default function FillingForm({ fields, onSubmit }) {
     );
 
     const handleInputChange = (name, value) => {
+        
         setFormValues((prev) => ({
             ...prev,
             [name]: value,
         }));
+    };
+    const handleFormSubmit = async (values) => {
+        try {
+            const errors = fields
+            .filter((field) => field.required && !formValues[field.name])
+            .map((field) => field.label);
+
+        if (errors.length > 0) {
+            Alert.alert("Error", `Please fill in: ${errors.join(", ")}`);
+            return;
+        }
+            console.log(formValues)
+            const response = await fetchData(endpoint, 'POST', formValues);
+
+            console.log("Response:", response);
+            Alert.alert("Success", "Form submitted successfully!");
+            // onSubmit(response);
+    
+        } catch (error) {
+            Alert.alert('Error', error.message || t('An unexpected error occurred'));
+        }
     };
 
     const handleSubmit = () => {
@@ -40,41 +65,33 @@ export default function FillingForm({ fields, onSubmit }) {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            {fields.map((field) => (
-                <View key={field.name} style={styles.inputGroup}>
-                    <Text style={styles.label}>{field.label}</Text>
-                    {field.type === "text" ? 
-                    (
-                        <TextInput
-                            style={styles.input}
-                            value={formValues[field.name] || ""}
-                            onChangeText={(text) =>
-                                handleInputChange(field.name, text)
-                            }
-                            placeholder={field.placeholder || ""}
-                        />
-                    ) 
-                    : field.type === "dropdown" ? 
-                    (
-                        <ModalDropdown
-                        options={field.options.map(option => option.name)}                         
-                        defaultValue="Select an option..."
-                        textStyle={styles.text}
-                        dropdownTextStyle={styles.dropdownText}
-                        dropdownStyle={styles.dropdownStyle}
-                    onSelect={(index, value) => {
-                            // Handle selection
-                            console.log(`Selected option: ${value}, Index: ${index}`);
-                            handleInputChange(field.name, field.options[index].id); // Save the selected ID
-                        }}
-                    />
-                    ) 
-                    : null
-                    }
-                </View>
-            ))}
+            {fields.map((field, index) => (
+    <View key={field.name || `field-${index}`} style={styles.inputGroup}>
+        <Text style={styles.label}>{field.label}</Text>
+        {field.type === "text" ? (
+            <TextInput
+                style={styles.input}
+                value={formValues[field.name] || ""}
+                onChangeText={(text) => handleInputChange(field.name, text)}
+                placeholder={field.placeholder || ""}
+            />
+        ) : field.type === "dropdown" ? (
+            <ModalDropdown
+                options={field.options.map(option => option.name)}
+                defaultValue="Select an option..."
+                textStyle={styles.text}
+                dropdownTextStyle={styles.dropdownText}
+                dropdownStyle={styles.dropdownStyle}
+                onSelect={(index, value) => {
+                    handleInputChange(field.name, field.options[index].id);
+                }}
+            />
+        ) : null}
+    </View>
+))}
+
             <View style={styles.buttonWrapper}>
-                <Button title="Submit" onPress={handleSubmit} color="#000" />
+                <Button title="Submit" onPress={handleFormSubmit} color="#000" />
             </View>
         </ScrollView>
     );

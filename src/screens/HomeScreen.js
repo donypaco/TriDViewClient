@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, Image, View } from 'react-native';
 import { fetchData } from '../api/Api';
 import { API_URLS } from "../constants/urls";
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const StoreCard = ({ storeName, base64File, description, storeId }) => {
   return (
@@ -24,18 +26,25 @@ const HomeScreen = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getStores = async () => {
-      try {
-        const data = await fetchData(API_URLS.STORES);
-        setStores(data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
     getStores();
   }, []);
+
+  const getStores = async () => {
+    try {
+      const data = await fetchData(API_URLS.STORES);
+      setStores(data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+// useFocusEffect(
+//   React.useCallback(() => {
+//     getStores(); // Refetch data when screen is focused
+//   }, [])
+// );
+
 
   if (loading) return <Text style={styles.loadingText}>Loading...</Text>;
   if (error) return <Text style={styles.errorText}>Error: {error.message}</Text>;
@@ -87,16 +96,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   image: {
-    width: '100%',
-    height: 150,
-    borderRadius: 8,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     marginBottom: 10,
-    resizeMode: 'cover', // Maintain aspect ratio
+    resizeMode: 'cover',
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   description: {
     fontSize: 14,
-    fontWeight: '400', // Regular weight
-    color: '#555', // Muted text
+    fontWeight: '400',
+    color: '#555',
     textAlign: 'center',
   },
 });

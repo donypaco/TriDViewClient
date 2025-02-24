@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabText: {
-    fontSize: 14,
+    fontSize: 10,
     color: '#777',
     textTransform: 'uppercase',
     fontWeight: '500',
